@@ -1,15 +1,10 @@
 const Joi = require('joi');
-const mongoose = require('mongoose'),
-    Schema = mongoose.Schema;
+const mongoose = require('mongoose');
 
-let userSchema = Schema({
-    email: String,
-    password: String
-});
+const config = require("config");
+const jwt = require("jsonwebtoken");
 
-let User = mongoose.model('User', userSchema);
-
-const Student = mongoose.model('Student', new mongoose.Schema({
+const studentSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -17,25 +12,61 @@ const Student = mongoose.model('Student', new mongoose.Schema({
     },
     gender: { type: String, enum: ["Male", "Female"] },
     dob: Date,
-    user: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    account: {
+        email: {
+            type: String,
+            required: true,
+            minlength: 5,
+            maxlength: 255,
+            unique: true
+        },
+        password: {
+            type: String,
+            required: true,
+            minlength: 5,
+            maxlength: 1024
+        },
+        role: {
+            type: String,
+            required: true
+        }
+    },
     courses: [{
         title: String,
         category: String,
         instructor: String,
-        Language: String,
+        language: String,
         progress: Number,
         section: { title: String, number: Number, progress: Number }
     }]
 
-}));
+}, { timestamps: { uploadedAt: 'created_at' } });
+
+studentSchema.methods.generateAuthToken = function() {
+    const token = jwt.sign({
+            _id: this._id,
+            name: this.name,
+            email: this.account.email,
+            email: this.account.role
+        },
+        config.get("jwtPrivateKey")
+    );
+    return token;
+};
 
 function validateStudent(student) {
     const schema = {
-        name: Joi.string().max(50).required()
+        name: Joi.string().max(50).required(),
+        gender: Joi.string().max(50).required(),
+        dob: Joi.optional(),
+        account: Joi.object().required(),
+        courses: Joi.optional(),
     };
 
     return Joi.validate(student, schema);
 }
 
+const Student = mongoose.model("Student", studentSchema);
+
 exports.Student = Student;
-exports.validate = validateStudent;
+exports.validateStudent = validateStudent;
