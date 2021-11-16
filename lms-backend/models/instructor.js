@@ -45,7 +45,7 @@ instructorSchema.methods.generateAuthToken = function() {
             _id: this._id,
             name: this.name,
             email: this.account.email,
-            email: this.account.role
+            role: this.account.role
         },
         config.get("jwtPrivateKey")
     );
@@ -55,7 +55,7 @@ instructorSchema.methods.generateAuthToken = function() {
 function validateInstructor(instructor) {
     const schema = {
         name: Joi.string().max(50).required(),
-        gender: Joi.string().max(50).required(),
+        gender: Joi.string().max(50).optional(),
         dob: Joi.optional(),
         account: Joi.object().required(),
         courses: Joi.optional(),

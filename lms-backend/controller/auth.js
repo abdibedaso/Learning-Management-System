@@ -42,9 +42,9 @@ router.post('/', async(req, res) => {
     });
 
     const token = user.generateAuthToken();
-    return res.send({
-        "data": { token }
-    });
+    return res.status(200)
+        .header("Authorization", `Bearer ${token}`)
+        .json({ "data": { token } });
 });
 
 function validate(req) {

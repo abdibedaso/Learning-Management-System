@@ -4,7 +4,7 @@ const config = require("config");
 module.exports = function(req, res, next) {
     if (!config.get("requiresAuth")) return next();
 
-    const token = req.header("x-auth-token");
+    const token = req.header("Authorization").replace('Bearer ', '');
     if (!token) return res.status(401).json({
         "error": {
             "code": "401",
