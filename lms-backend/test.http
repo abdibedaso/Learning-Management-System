@@ -1,5 +1,9 @@
 GET http://localhost:3900/api/teachers/619222baac5e26847efe2575/courses
 
+
+###
+GET http://localhost:3900/api/teachers/61935bb0bcaea96498bbf5f4/courses/61935be2bcaea96498bbf5fd/sections
+
 ###
 GET http://localhost:3900/api/teachers/courses/?courseName=ASD
 

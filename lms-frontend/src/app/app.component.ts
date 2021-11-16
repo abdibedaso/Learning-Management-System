@@ -58,21 +58,25 @@ import { SearchService } from './shared/search.service';
 })
 
 export class AppComponent {
- searchForm:FormGroup;
- 
+  searchForm: FormGroup;
+  courses: any = []
+
   constructor(public authService: AuthService,
-     private searchService:SearchService, 
-     public fb: FormBuilder) {
+    private searchService: SearchService,
+    public fb: FormBuilder) {
     this.searchForm = this.fb.group({
       search: ['']
-  })}
+    })
+  }
 
   logout() {
     this.authService.doLogout()
   }
-  search(){
-    // this.searchService.search(this.searchForm.value)
-    console.log(this.searchService.searchHeroes(this.searchForm.value))
+  search() {
+    const app = this.searchService.searchCourses(this.searchForm.value)
+      .subscribe((data) => {
+        this.courses = data
+      })
   }
 
 }
