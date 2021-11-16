@@ -38,12 +38,8 @@ import { SearchService } from './shared/search.service';
 
     </div>
     
-
-  <section class="jumbotron mt-4 ">
-
-      <router-outlet ></router-outlet>
+    <router-outlet class=" mt-4 "></router-outlet>
   
-  </section>
     <!-- <footer class="text-muted">
       <div class="container">
         <p class="float-right">

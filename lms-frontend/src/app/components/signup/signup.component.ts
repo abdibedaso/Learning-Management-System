@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-signup',
   template: `
+  <section class="jumbotron mt-4 ">
   <!-- <section class="vh-100" style="background-color: #eee;"> -->
   <!-- <div class="container h-100"> -->
     <div class="row d-flex justify-content-center align-items-center h-100">
@@ -74,7 +75,7 @@ import { Router } from '@angular/router';
       </div>
     </div>
   <!-- </div> -->
-<!-- </section> -->
+</section>
 
     <!-- <div class="auth-wrapper">
       <form class="form-signin" [formGroup]="signupForm" (ngSubmit)="registerUser()">
@@ -107,7 +108,7 @@ export class SignupComponent implements OnInit {
   ) {
     this.signupForm = this.fb.group({
       name: ['', Validators.required],
-      email: ['', Validators.pattern("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")])],
+      email: ['', Validators.pattern("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")],
       password: ['', Validators.required],
       role: 'Student'
     })

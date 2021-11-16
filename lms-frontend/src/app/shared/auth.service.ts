@@ -54,7 +54,7 @@ export class AuthService {
           if(this.isStudent)
             this.router.navigate(['user/' + _id]);
           else if(this.isInstructor)
-            this.router.navigate(['instructor/' + _id]);
+            this.router.navigate([`instructor/${_id}/courses`]);
         // })
       })
   }

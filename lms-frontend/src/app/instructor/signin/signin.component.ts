@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-signin',
   template: `
+  <section class="jumbotron mt-4 text-center">
         <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col-lg-12 col-xl-11">
         <div class="card text-black" style="border-radius: 25px;">
@@ -49,6 +50,7 @@ import { Router } from '@angular/router';
         </div>
       </div>
     </div>
+  </section>
   `,
   styles: [
   ]
