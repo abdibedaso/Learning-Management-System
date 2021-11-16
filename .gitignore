@@ -1,4 +1,6 @@
 lms-backend/config/*
+lms-backend/package-lock.json
+lms-backend/test.rest
 
 # Logs
 logs
