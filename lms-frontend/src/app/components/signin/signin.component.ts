@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from './../../shared/auth.service';
 import { Router } from '@angular/router';
 
@@ -33,7 +33,7 @@ import { Router } from '@angular/router';
                   </div>
 
                   <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                    <button type="submit" class="btn btn-primary btn-lg btn-block">Sign in</button>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block" [disabled]="!signinForm.valid">Sign in</button>
                   </div>
 
                 </form>
@@ -62,8 +62,8 @@ export class SigninComponent implements OnInit {
     public router: Router
   ) {
     this.signinForm = this.fb.group({
-      email: [''],
-      password: ['']
+      email: ['',Validators.compose([Validators.required, Validators.email])],
+      password: ['',Validators.required]
     })
   }
 

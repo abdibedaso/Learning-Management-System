@@ -1,5 +1,8 @@
+import { FormBuilder } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { Component } from '@angular/core';
 import { AuthService } from './shared/auth.service';
+import { SearchService } from './shared/search.service';
 
 @Component({
   selector: 'app-root',
@@ -9,9 +12,9 @@ import { AuthService } from './shared/auth.service';
           <h5 class="my-0 mr-md-auto "> <a routerLinkActive="active" routerLink="/home">LMS</a></h5>
         </nav>
         <nav class="my-0 mr-md-auto">
-          <form class="my-0 mr-md-auto font-weight-normal form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Looking for a Course" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          <form [formGroup]="searchForm" class="my-0 mr-md-auto font-weight-normal form-inline my-2 my-lg-0">
+            <input  class="form-control mr-sm-2" type="search" placeholder="Looking for a Course" aria-label="Search">
+            <button (click)="search()" class="btn btn-outline-success my-2 my-sm-0" type="submit"  >Search</button>
           </form>
         </nav>
         <nav class="my-2 my-md-0 mr-md-3">
@@ -44,11 +47,21 @@ import { AuthService } from './shared/auth.service';
 })
 
 export class AppComponent {
-
-  constructor(public authService: AuthService) { }
+ searchForm:FormGroup;
+ 
+  constructor(public authService: AuthService,
+     private searchService:SearchService, 
+     public fb: FormBuilder) {
+    this.searchForm = this.fb.group({
+      search: ['']
+  })}
 
   logout() {
     this.authService.doLogout()
+  }
+  search(){
+    // this.searchService.search(this.searchForm.value)
+    console.log(this.searchService.searchHeroes(this.searchForm.value))
   }
 
 }
