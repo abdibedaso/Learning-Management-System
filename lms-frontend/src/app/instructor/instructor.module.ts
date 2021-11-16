@@ -6,6 +6,8 @@ import { SigninComponent } from './signin/signin.component';
 import { SignupComponent } from './signup/signup.component';
 import { ProfileComponent } from './profile/profile.component';
 
+import { InstructorAuthGuard } from "../shared/instructor-auth.guard";
+
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -23,7 +25,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
         { path: '', component: HomeComponent },
         { path: 'signin', component: SigninComponent },
         { path: 'signup', component: SignupComponent },
-        { path: ':id', component: ProfileComponent },
+        { path: ':id', component: ProfileComponent, canActivate: [InstructorAuthGuard] },
       ]),
       ReactiveFormsModule,
       FormsModule,
