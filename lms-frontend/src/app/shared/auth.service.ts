@@ -28,7 +28,7 @@ export class AuthService {
     return this.http.post(api,  {
       // ...user,
       name: user.name,
-      account:{"role": "Student", email: user.email, password: user.password}
+      account:{role: user.role, email: user.email, password: user.password}
     })
       .pipe(
         catchError(this.handleError)
@@ -38,8 +38,7 @@ export class AuthService {
   // Sign-in
   signIn(user: User) {
     return this.http.post<any>(`${this.endpoint}/auth`, {
-      ...user,
-      "role": "Student"
+      ...user
     }, { headers: this.headers})
       .subscribe((res: any) => {
 
@@ -52,7 +51,10 @@ export class AuthService {
         // localStorage.setItem('access_token', res.data.token)
         // this.getUserProfile(_id).subscribe((res) => {
           this.currentUser = {_id, name, email, role};
-          this.router.navigate(['user/' + _id]);
+          if(this.isStudent)
+            this.router.navigate(['user/' + _id]);
+          else if(this.isInstructor)
+            this.router.navigate(['instructor/' + _id]);
         // })
       })
   }
@@ -68,9 +70,9 @@ export class AuthService {
 
   doLogout() {
     let removeToken = this.cookieService.delete('access_token');
-    if (removeToken == null) {
+    // if (removeToken !== null) {
       this.router.navigate(['home']);
-    }
+    // }
   }
 
   // User profile
@@ -91,9 +93,34 @@ export class AuthService {
     );
   }
 
-  
   getCurrentUserProfile(): Observable<any> {
     return of(this.getDecodedAccessToken(this.cookieService.get('access_token')));
+  }
+
+  getCurrentUserRole(): Observable<any> {
+    return of(this.getDecodedAccessToken(this.cookieService.get('access_token')).role); 
+  }
+  
+  get isInstructor(): boolean {
+    let role:string;
+
+   this.getCurrentUserRole().subscribe(res => {
+      role = res;
+    })
+    console.log(role);
+    return role == 'Instructor' ? true : false;
+   
+  }
+  
+  get isStudent(): boolean {
+    let role:string;
+
+   this.getCurrentUserRole().subscribe(res => {
+      role = res;
+    })
+    console.log(role);
+    
+    return role == 'Student' ? true : false;
   }
 
   // Error 
