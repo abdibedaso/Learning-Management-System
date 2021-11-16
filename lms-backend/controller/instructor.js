@@ -7,7 +7,18 @@ const path = require("path");
 const multer = require("multer");
 
 //get all courses of an instructor
- 
+router.get("/:teacherId/courses", async (req, res, next) => {
+  const { teacherId } = req.params;
+  await Instructor.findById(teacherId, { courses: 1 })
+    .then((result) => {
+      res.status(200).send(result);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Error Occurred",
+      });
+    });
+});
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -34,12 +45,13 @@ var upload = multer({
   // video is the name of file attribute
 }).single("video");
 
-router.post("/:teacherId/courses/:courseId/sections",async function (req, res, next) {
-  // Error MiddleWare for multer file upload, so if any
-  // error occurs, the image would not be uploaded!
-  const { teacherId, courseId } = req.params;
+router.post(
+  "/:teacherId/courses/:courseId/sections",
+  async function (req, res, next) {
+    // Error MiddleWare for multer file upload, so if any
+    // error occurs, the image would not be uploaded!
+    const { teacherId, courseId } = req.params;
     upload(req, res, async function (err) {
-     
       // if (err) {
       //   // ERROR occured (here it can be occured due
       //   // to uploading image of size greater than
@@ -49,7 +61,7 @@ router.post("/:teacherId/courses/:courseId/sections",async function (req, res, n
       //   // SUCCESS, image successfully uploaded
       //   res.send("Success, Image uploaded!");
       // }
-      console.log(req.body)
+      console.log(req.body);
       await Instructor.updateOne(
         { _id: teacherId, "courses._id": courseId },
         { $push: { "courses.$.section": req.body } },
@@ -63,17 +75,15 @@ router.post("/:teacherId/courses/:courseId/sections",async function (req, res, n
         }
       ).clone();
     });
-    
+
     // const section = {
     //   number : req.body.number,
     //     title : req.body.title,
     //     content : upload.storage.filename
     // }
     // console.log(section)
-
-    
-  
-});
+  }
+);
 
 // post/add course
 router.post("/:teacherId/courses", async (req, res, next) => {
@@ -192,6 +202,22 @@ router.delete(
     );
   }
 );
+
+router.get("/courses/", async (req, res) => {
+
+  const { courseName } = req.query;
+
+  await Instructor.find({'courses.title':{$regex:courseName}},{courses:1})
+    .then((result) => {
+      res.status(200).send(result);
+      console.log(result)
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Error Occurred",
+      });
+    });
+});
 
 router.get("/", function (req, res) {
   res.sendFile(__dirname + "/index.html");

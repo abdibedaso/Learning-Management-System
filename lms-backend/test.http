@@ -1,14 +1,19 @@
 GET http://localhost:3900/api/teachers/619222baac5e26847efe2575/courses
 
 ###
-POST http://localhost:3900/api/teachers/61932e6fe0d5d8a264fe5bf4/courses
+GET http://localhost:3900/api/teachers/courses/?courseName=ASD
+
+###
+GET http://localhost:3900/api/categories/all
+###
+POST http://localhost:3900/api/teachers/61935bb0bcaea96498bbf5f4/courses
 Content-Type: application/json
 
 {
 
-        "title": "String",
+        "title": "Programming",
 
-        "category": "String",
+        "category": "ASD",
 
         "language": "String",
 

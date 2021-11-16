@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from './../../shared/auth.service';
 import { Router } from '@angular/router';
 
@@ -57,7 +57,7 @@ import { Router } from '@angular/router';
                   </div> -->
 
                   <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                    <button type="submit" class="btn btn-primary btn-lg btn-block">Sign up</button>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block" [disabled]="!signupForm.valid">Sign up</button>
                   </div>
 
                 </form>
@@ -106,9 +106,9 @@ export class SignupComponent implements OnInit {
     public router: Router
   ) {
     this.signupForm = this.fb.group({
-      name: [''],
-      email: [''],
-      password: [''],
+      name: ['', Validators.required],
+      email: ['', Validators.pattern("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")])],
+      password: ['', Validators.required],
       role: 'Student'
     })
   }
