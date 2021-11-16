@@ -1,0 +1,72 @@
+GET http://localhost:3900/api/teachers/619222baac5e26847efe2575/courses
+
+###
+POST http://localhost:3900/api/teachers/61932e6fe0d5d8a264fe5bf4/courses
+Content-Type: application/json
+
+{
+
+        "title": "String",
+
+        "category": "String",
+
+        "language": "String",
+
+        "section": [{ 
+
+            "number": 2, 
+
+            "title": "String", 
+
+            "content": "String"
+
+        }]
+
+    }
+###
+GET http://localhost:3900/api/teachers/6191f9fbfecfa29b632566b3
+###
+GET http://localhost:3900/api/teachers/
+###
+
+POST http://localhost:3900/api/users
+Content-Type: application/json
+{
+
+    "name": "abdi tufa",
+
+    "gender": "Female",
+
+    "dob": "10/10/1996",
+
+    "account": {
+
+        "email": "abdi@gmail.com",
+
+        "password": "12345678",
+
+        "role": "Instructor"
+
+    },
+
+    "courses": [{
+
+        "title": "String",
+
+        "category": "String",
+
+        "language": "String",
+
+        "section": [{ 
+
+            "number": 1, 
+
+            "title": "String", 
+
+            "content": "String"
+
+        }]
+
+    }]
+
+}
