@@ -182,6 +182,23 @@ router.put("/:teacherId/course/:courseId", async (req, res, next) => {
   }
 );
 */
+
+router.get(
+  "/:teacherId/courses/:courseId/sections",
+  async (req, res, next) => {
+    const { teacherId, courseId } = req.params;
+
+    await Instructor.find({_id:teacherId,'courses._id':courseId},function (err, data) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(data);
+      }
+    }
+  )
+  });
+
+
 //delete sections for a specific course for a specific instructor
 router.delete(
   "/:teacherId/courses/:courseId/sections/:sectionId",
