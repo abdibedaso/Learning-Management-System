@@ -2,7 +2,7 @@ const express = require("express");
 const { Category } = require("../models/category");
 const router = express.Router();
 
-router.get('/all',async (req,res)=>{
+router.get('/', async(req, res) => {
     // await Category.find({}, function(err, result) {
     //     if (err) {
     //       console.log(err);
@@ -10,15 +10,15 @@ router.get('/all',async (req,res)=>{
     //       res.json(result);
     //     }
     //   });
-      await Category.find({}).exec()
-      .then((result) => {
-        res.status(200).send(result);
-      })
-      .catch((err) => {
-        res.status(500).send({
-          message: err.message || "Error Occurred",
+    await Category.find({}).exec()
+        .then((result) => {
+            res.status(200).send(result);
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message: err.message || "Error Occurred",
+            });
         });
-      });
 })
 
 

@@ -11,6 +11,7 @@ import { InstructorAuthGuard } from "../shared/instructor-auth.guard";
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from '../shared/authconfig.interceptor';
 
 @NgModule({
   declarations: [
@@ -26,10 +27,18 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
         { path: 'signin', component: SigninComponent },
         { path: 'signup', component: SignupComponent },
         { path: ':id', component: ProfileComponent, canActivate: [InstructorAuthGuard] },
+        { path: ':id/courses', loadChildren: () => import('./courses/courses.module').then(m => m.CoursesModule), canActivate: [InstructorAuthGuard] }
       ]),
       ReactiveFormsModule,
       FormsModule,
       HttpClientModule
-  ]
+  ],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
 })
 export class InstructorModule { }

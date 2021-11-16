@@ -1,23 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-list',
   template: `
-  <section class="jumbotron mt-lg-5 text-center">
     <p>
-      home works!
+      list works!
     </p>
-  </section>
   `,
   styles: [
   ]
 })
-export class HomeComponent implements OnInit {
+export class ListComponent implements OnInit {
 
   constructor() { }
 
   ngOnInit(): void {
-    
   }
 
 }

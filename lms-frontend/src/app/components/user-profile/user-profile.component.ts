@@ -5,6 +5,7 @@ import { AuthService } from './../../shared/auth.service';
 @Component({
   selector: 'app-user-profile',
   template: `
+  <section class="jumbotron mt-4 ">
     <div class="container">
       <div class="row">
           <div class="inner-main">
@@ -14,6 +15,7 @@ import { AuthService } from './../../shared/auth.service';
           </div>
       </div>
     </div>
+  </section>
   `,
   styles: ['']
 })
