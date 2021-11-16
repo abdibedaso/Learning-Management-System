@@ -14,14 +14,25 @@ import { AuthService } from './shared/auth.service';
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
           </form>
         </nav>
-        <nav class="my-2 my-md-0 mr-md-3">
-            <a *ngIf="!this.authService.isLoggedIn" class="btn btn-outline-primary" routerLinkActive="active" routerLinkActive="active" routerLink="/signup">Sign up</a>
-            <a *ngIf="this.authService.isLoggedIn" class="p-2 text-dark">User Profile</a>
-            <a *ngIf="!this.authService.isLoggedIn" class="p-2 text-dark" routerLinkActive="active" routerLink="/login">Sign
+
+        <input type="hidden" [routerLink]="'instructor'" routerLinkActive #instructor="routerLinkActive" />
+        <nav *ngIf="!instructor.isActive" class="my-2 my-md-0 mr-md-3">
+            <a *ngIf="!this.authService.isLoggedIn" class="btn btn-outline-primary" routerLinkActive="active" routerLink="/signin">Sign
           in</a>
+            <a *ngIf="this.authService.isLoggedIn" class="p-2 text-dark ">User Profile</a>
+            <a *ngIf="!this.authService.isLoggedIn" class="btn btn-outline-primary ml-2" routerLinkActive="active" routerLinkActive="active" routerLink="/signup">Sign up</a>
         </nav>
-        <a *ngIf="!this.authService.isLoggedIn" class="btn btn-outline-primary" routerLinkActive="active" routerLinkActive="active" routerLink="/instructor/register">Become Instructor</a>
-        <button (click)="logout()" *ngIf="this.authService.isLoggedIn" type="button" class="btn btn-danger">Logout</button>
+        <a *ngIf="(!this.authService.isLoggedIn && !instructor.isActive)" class="btn btn-outline-secondary"  routerLinkActive="active" routerLink="/instructor">Become Instructor</a>
+        <button (click)="logout()" *ngIf="(this.authService.isLoggedIn && !instructor.isActive)" type="button" class="btn btn-danger">Logout</button>
+        
+        <nav *ngIf="instructor.isActive" class="my-2 my-md-0 mr-md-3">
+            <a *ngIf="!this.authService.isLoggedIn" class="btn btn-outline-primary" routerLinkActive="active" routerLink="instructor/signin">Sign
+          in</a>
+            <a *ngIf="this.authService.isLoggedIn" class="p-2 text-dark ">User Profile</a>
+            <a *ngIf="!this.authService.isLoggedIn" class="btn btn-outline-primary ml-2" routerLinkActive="active" routerLinkActive="active" routerLink="instructor/signup">Sign up</a>
+        </nav>
+        <button (click)="logout()" *ngIf="(this.authService.isLoggedIn && instructor.isActive)" type="button" class="btn btn-danger">Logout</button>
+
     </div>
     
 

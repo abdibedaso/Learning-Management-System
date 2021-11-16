@@ -50,9 +50,9 @@ import { Router } from '@angular/router';
       </div>
     </div>
   `,
-  styles: ['']
+  styles: [
+  ]
 })
-
 export class SigninComponent implements OnInit {
   signinForm: FormGroup;
 
@@ -64,7 +64,7 @@ export class SigninComponent implements OnInit {
     this.signinForm = this.fb.group({
       email: [''],
       password: [''],
-      role: 'Student'
+      role: 'Instructor'
     })
   }
 

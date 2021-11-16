@@ -12,9 +12,10 @@ import { AuthGuard } from "./shared/auth.guard";
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
-  { path: 'login', component: SigninComponent },
+  { path: 'signin', component: SigninComponent },
   { path: 'signup', component: SignupComponent },
-  { path: 'user/:id', component: UserProfileComponent, canActivate: [AuthGuard] }
+  { path: 'user/:id', component: UserProfileComponent, canActivate: [AuthGuard] },
+  { path: 'instructor', loadChildren: () => import('./instructor/instructor.module').then(m => m.InstructorModule) }
 ];
 
 @NgModule({

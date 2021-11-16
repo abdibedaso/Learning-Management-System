@@ -108,8 +108,8 @@ export class SignupComponent implements OnInit {
     this.signupForm = this.fb.group({
       name: [''],
       email: [''],
-      // mobile: [''],
-      password: ['']
+      password: [''],
+      role: 'Student'
     })
   }
 
@@ -119,9 +119,8 @@ export class SignupComponent implements OnInit {
   registerUser() {
     this.authService.signUp(this.signupForm.value).subscribe((res) => {
       if (res.result) {
-        console.log(res)
         this.signupForm.reset()
-        this.router.navigate(['login']);
+        this.router.navigate(['signin']);
       }
     })
   }
