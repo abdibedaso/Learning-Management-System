@@ -107,9 +107,9 @@ export class SignupComponent implements OnInit {
   ) {
     this.signupForm = this.fb.group({
       name: ['', Validators.required],
-      email: ['', Validators.compose([Validators.required, Validators.pattern("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")])],
-      // mobile: [''],
-      password: ['', Validators.required]
+      email: ['', Validators.pattern("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")])],
+      password: ['', Validators.required],
+      role: 'Student'
     })
   }
 
@@ -119,9 +119,8 @@ export class SignupComponent implements OnInit {
   registerUser() {
     this.authService.signUp(this.signupForm.value).subscribe((res) => {
       if (res.result) {
-        console.log(res)
         this.signupForm.reset()
-        this.router.navigate(['login']);
+        this.router.navigate(['signin']);
       }
     })
   }
