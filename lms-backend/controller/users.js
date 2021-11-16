@@ -33,10 +33,10 @@ router.post("/", async(req, res) => {
 
         const token = instructor.generateAuthToken();
         res
-            .header("x-auth-token", token)
+        // .header("x-auth-token", token)
             .json({
-                "data": _.pick(instructor, ["_id", "name"])
-            });
+            "data": _.pick(instructor, ["_id", "name"])
+        });
 
     } else if (req.body.account.role == "Student") {
         const { error } = validateStudent(req.body);
@@ -63,10 +63,10 @@ router.post("/", async(req, res) => {
 
         const token = student.generateAuthToken();
         res
-            .header("x-auth-token", token)
+        // .header("x-auth-token", token)
             .json({
-                "data": _.pick(student, ["_id", "name"])
-            });
+            "data": _.pick(student, ["_id", "name"])
+        });
 
     }
 
