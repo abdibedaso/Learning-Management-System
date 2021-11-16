@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, CanActivate, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AuthService } from './../shared/auth.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class InstructorAuthGuard implements CanActivate {
 
   constructor(
     public authService: AuthService,
@@ -17,15 +17,16 @@ export class AuthGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
       
-      if (this.authService.isLoggedIn !== true) {
-        window.alert("Access not allowed!");
-        this.router.navigate(['signin'])
-      }
+    if (this.authService.isLoggedIn !== true) {
+      window.alert("Access not allowed!");
+      this.router.navigate(['instructor/signin'])
+    }
       
-      if (!this.authService.isStudent) {
-        window.alert("Unauthorized!");
-        this.router.navigate(['home'])
-      }
+    if (!this.authService.isInstructor) {
+      window.alert("Unauthorized!");
+      this.router.navigate(['instructor/signin'])
+    }
+
     return true;
   }
 }
