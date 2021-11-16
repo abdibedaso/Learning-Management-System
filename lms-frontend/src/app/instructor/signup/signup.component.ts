@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from './../../shared/auth.service';
 import { Router } from '@angular/router';
 
@@ -36,12 +36,12 @@ import { Router } from '@angular/router';
                     <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                     <div class="form-outline flex-fill mb-0">
                       <label class="form-label" for="form3Example4c">Password</label>
-                      <input type="password" id="form3Example4c" class="form-control" formControlName="password" placeholder="Password" required/>
+                      <input type="password" id="form3Example4c" class="form-control" formControlName="password" placeholder="Password" required required minlength="5"/>
                     </div>
                   </div>
 
                   <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                    <button type="submit" class="btn btn-primary btn-lg btn-block">Sign up</button>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block" [disabled]="!signupForm.valid">Sign up</button>
                   </div>
 
                 </form>
@@ -70,9 +70,12 @@ export class SignupComponent implements OnInit {
     public router: Router
   ) {
     this.signupForm = this.fb.group({
-      name: [''],
-      email: [''],
-      password: [''],
+      name: ['', Validators.required],
+      email: ['', [
+        Validators.required,
+        Validators.pattern("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+      ]],
+      password: ['', Validators.required],
       role: 'Instructor'
     })
   }
