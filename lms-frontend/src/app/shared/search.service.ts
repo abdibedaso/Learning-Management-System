@@ -8,7 +8,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class SearchService {
-  endpoint: string = 'http://localhost:3900/api/teachers';
+  endpoint: string = 'http://localhost:3900/api/instructors';
   headers = new HttpHeaders().set('Content-Type', 'application/json');
   courses: any = []
   constructor(

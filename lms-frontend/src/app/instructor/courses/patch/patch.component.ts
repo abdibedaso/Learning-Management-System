@@ -74,6 +74,7 @@ import { CoursesService } from './../courses.service';
                 </div> -->
                 
                 <div class="col-0">
+                  <input hidden type="text" formControlName="_id" value="" required>
                   <input hidden type="text" formControlName="number" value="" required>
                   <svg class="bd-placeholder-img rounded m-1" width="32" height="32" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 32x32">
                     <rect width="100%" height="100%" fill="#007bff"></rect>
@@ -88,12 +89,12 @@ import { CoursesService } from './../courses.service';
 
                 <div class="col-5">
                   <input *ngIf="true" (change)="handleFileInput($event.target.files, i)" type="file" formControlName="content" class="form-control-file" id="content" placeholder="Section content" value="" required>
+                  <!-- <span *ngIf="section.get('content').errors && section.get('content').hasError('required')" class="validation">* required</span> -->
                 </div>
 
                 <div class="col-0">
-                  <a *ngIf="(section.get('content').value != '')" (click)="deleteSection(i)" type="button" class="btn btn-info mr-2">View</a>
-                  <button  type="submit" (click)="patchSectionInfo(i)"  class="btn mr-2 btn-primary" >Insert</button>
-                  <button (click)="deleteSection(i)" type="button" class="btn btn-danger">Delete</button>
+                  <a *ngIf="(section.get('content').value != '')" (click)="deleteSection(i)" type="button" class="btn btn-sm btn-info mr-2">View</a>
+                  <button (click)="deleteSection(i)" type="button" class="btn btn-sm btn-danger">Delete</button>
                 </div>
 
               </div>
@@ -103,6 +104,7 @@ import { CoursesService } from './../courses.service';
         </div>
 
         <small class="d-block text-right mt-3">
+          <button (click)="patchSectionInfo()"  class="btn  ml-2 btn-sm btn-primary" >Update</button>
           <button (click)="addSection()" type="button" class="btn  ml-2 btn-sm btn-primary"> Add Sections</button>
       </small>
       </form>
@@ -176,9 +178,10 @@ export class PatchComponent implements OnInit {
 
   }
 
-  addSection(number = "", title = "", content = ""){
+  addSection(_id = null, number = "", title = "", content = ""){
     let section = this.sectionsInfo.get('section') as FormArray;
     section.push(this.formBuilder.group({
+      _id: [_id],
       number: [number, [Validators.required]],
       title : [title, [Validators.required]],
       content : [content, [Validators.required]]
@@ -194,13 +197,13 @@ export class PatchComponent implements OnInit {
     this.fileToUpload[index] = files.item(0);
   }
 
-  patchSectionInfo(index){
+  patchSectionInfo(){
     // console.log('data is ', this.sectionsInfo.value.section[index]);
 
     let id = this._route.snapshot.paramMap.get('id');
     let course_id = this._route.snapshot.paramMap.get('course_id');
-
-    this.coursesService.patchCoursesSections({id, course_id, section: {...this.sectionsInfo.value.section[index], number: index+1} }, this.fileToUpload[index]).subscribe((res) => {
+    
+    this.coursesService.patchCoursesSections({id, course_id, section: this.sectionsInfo.value.section }, this.fileToUpload).subscribe((res) => {
         // this.router.navigate(['instructor', id, 'courses']);
     })
 
@@ -212,13 +215,15 @@ export class PatchComponent implements OnInit {
     let course_id = this._route.snapshot.paramMap.get('course_id');
     
     this.coursesService.getCoursesSections({id, course_id}).subscribe((res) => {
-      this.sections = res;
-      // this.router.navigate(['instructor', id, 'courses']);
-    })
+      // console.log(res);
 
-    this.sections.forEach(section => {
-      console.log(section);
-      this.addSection(section['number'], section['title'], section['content']);
+      this.sections = res;
+      
+      res.forEach(section => {
+          // console.log(section);
+          setTimeout(_=>this.addSection(section._id, section.number, section.title, section.content));
+      });
+      // this.router.navigate(['instructor', id, 'courses']);
     });
 
   }

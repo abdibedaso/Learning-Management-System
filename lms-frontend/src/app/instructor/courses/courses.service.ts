@@ -50,13 +50,20 @@ export class CoursesService {
   }
 
   // patchCoursesSections
-  patchCoursesSections({id, course_id, section:{ number, title, content }}, fileToUpload: File): Observable<any> {
+  patchCoursesSections({id, course_id, section}, fileToUpload: File[]): Observable<any> {
     let api = `${this.endpoint}/${id}/courses/${course_id}/sections`;
     const formData: FormData = new FormData();
-    formData.append('content', fileToUpload, fileToUpload.name);
+
+    fileToUpload.forEach(element => {
+      formData.append('content', element, element.name);
+    });
+
+    section.forEach(element => {
+      // formData.append('number', element.number);
+      formData.append('title', element.title);
+      formData.append('content', element.content);
+    });
     
-    formData.append('number', number);
-    formData.append('title', title);
     // , {headers: new HttpHeaders().set('Content-Type', 'multipart/form-data;')}
     return this.http.post(api, formData)
       .pipe(

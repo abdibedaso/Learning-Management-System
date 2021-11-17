@@ -12,17 +12,17 @@ import { SearchService } from './shared/search.service';
           <h5 class="my-0 mr-md-auto "> <a routerLinkActive="active" routerLink="/home">LMS</a></h5>
         </nav>
         <nav class="my-0 mr-md-auto">
-          <form [formGroup]="searchForm" class="my-0 mr-md-auto font-weight-normal form-inline my-2 my-lg-0">
+          <!-- <form [formGroup]="searchForm" class="my-0 mr-md-auto font-weight-normal form-inline my-2 my-lg-0">
             <input  class="form-control mr-sm-2" type="search" placeholder="Looking for a Course" aria-label="Search">
             <button (click)="search()" class="btn btn-outline-success my-2 my-sm-0" type="submit"  >Search</button>
-          </form>
+          </form> -->
         </nav>
 
         <input type="hidden" [routerLink]="'instructor'" routerLinkActive #instructor="routerLinkActive" />
         <nav *ngIf="!instructor.isActive" class="my-2 my-md-0 mr-md-3">
             <a *ngIf="!this.authService.isLoggedIn" class="btn btn-outline-primary" routerLinkActive="active" routerLink="/signin">Sign
           in</a>
-            <a *ngIf="this.authService.isLoggedIn" class="p-2 text-dark ">User Profile</a>
+            <!-- <a *ngIf="this.authService.isLoggedIn" class="p-2 text- btn-primary" routerLink="">User Profile</a> -->
             <a *ngIf="!this.authService.isLoggedIn" class="btn btn-outline-primary ml-2" routerLinkActive="active" routerLinkActive="active" routerLink="/signup">Sign up</a>
         </nav>
         <a *ngIf="(!this.authService.isLoggedIn && !instructor.isActive)" class="btn btn-outline-secondary"  routerLinkActive="active" routerLink="/instructor">Become Instructor</a>
@@ -31,7 +31,7 @@ import { SearchService } from './shared/search.service';
         <nav *ngIf="instructor.isActive" class="my-2 my-md-0 mr-md-3">
             <a *ngIf="!this.authService.isLoggedIn" class="btn btn-outline-primary" routerLinkActive="active" routerLink="instructor/signin">Sign
           in</a>
-            <a *ngIf="this.authService.isLoggedIn" class="p-2 text-dark ">User Profile</a>
+            <!-- <button *ngIf="this.authService.isLoggedIn" class="p-2 btn btn-info text- ">User Profile</button> -->
             <a *ngIf="!this.authService.isLoggedIn" class="btn btn-outline-primary ml-2" routerLinkActive="active" routerLinkActive="active" routerLink="instructor/signup">Sign up</a>
         </nav>
         <button (click)="logout()" *ngIf="(this.authService.isLoggedIn && instructor.isActive)" type="button" class="btn btn-danger">Logout</button>
@@ -39,7 +39,14 @@ import { SearchService } from './shared/search.service';
     </div>
     
     <router-outlet class=" mt-4 "></router-outlet>
-  
+    <!-- <footer class="page-footer font-small blue">
+
+      <div class="footer-copyright text-center py-3">© 2020 Copyright:
+        <a href="https://mdbootstrap.com/"> MDBootstrap.com</a>
+      </div>
+
+    </footer> -->
+
     <!-- <footer class="text-muted">
       <div class="container">
         <p class="float-right">
@@ -69,8 +76,10 @@ export class AppComponent {
     this.authService.doLogout()
   }
   search() {
-    const app = this.searchService.searchCourses(this.searchForm.value)
+    let app = this.searchService.searchCourses(this.searchForm.value)
       .subscribe((data) => {
+        console.log(data);
+        
         this.courses = data
       })
   }

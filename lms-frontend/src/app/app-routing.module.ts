@@ -15,6 +15,7 @@ const routes: Routes = [
   { path: 'signin', component: SigninComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'user/:id', component: UserProfileComponent, canActivate: [AuthGuard] },
+  { path: 'user/:id/courses', loadChildren: () => import('./student/courses/courses.module').then(m => m.CoursesModule) },
   { path: 'instructor', loadChildren: () => import('./instructor/instructor.module').then(m => m.InstructorModule) }
 ];
 
