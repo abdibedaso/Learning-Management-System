@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-enroled',
+  selector: 'app-search',
   template: `
     <p>
-      enroled works!
+      search works!
     </p>
   `,
   styles: [
   ]
 })
-export class EnroledComponent implements OnInit {
+export class SearchComponent implements OnInit {
 
   constructor() { }
 

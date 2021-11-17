@@ -6,7 +6,7 @@ module.exports = function(app) {
         throw new Error('FATAL ERROR: jwtPrivateKey is not defined.');
     }
 
-    app.set('strict routing', true);
+    app.set('strict routing', false);
     app.set('case sensitive routing', true);
 
 

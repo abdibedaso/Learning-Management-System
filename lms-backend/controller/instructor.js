@@ -26,12 +26,22 @@ router.post("/:teacherId/courses/:courseId/sections", uploadVideo, async functio
 
     const { teacherId, courseId } = req.params;
     try {
-        console.log(req.body);
-        const { mimetype, destination, filename, extension } = req.file;
-        const file = filename + '.' + extension
-            // const content = { mimetype, destination, filename: file };
+
+        const { files } = req;
+        const { title, content } = req.body;
+
+        let section = [];
+
+        for (let i = 0; i < title.length; i++) {
+            console.log(files);
+            if (files[i] != undefined)
+                section.push({ number: i + 1, title: title[i], content: files[i].filename + '.' + files[i].extension });
+            else
+                section.push({ number: i + 1, title: title[i], content });
+        }
+
         await Instructor.updateOne({ _id: teacherId, "courses._id": courseId }, {
-                $push: { "courses.$.section": {...req.body, content: file } }
+                "courses.$.section": section
             },
             function(err, data) {
                 if (err) {
@@ -42,6 +52,7 @@ router.post("/:teacherId/courses/:courseId/sections", uploadVideo, async functio
                 }
             }
         ).clone();
+
     } catch (err) {
         next(new Error())
     }
@@ -143,20 +154,39 @@ router.put("/:teacherId/course/:courseId", async(req, res, next) => {
 );
 */
 
-router.get(
-  "/:teacherId/courses/:courseId/sections",
-  async (req, res, next) => {
-    const { teacherId, courseId } = req.params;
-
-    await Instructor.find({_id:teacherId,'courses._id':courseId},function (err, data) {
-      if (err) {
-        console.log(err);
-      } else {
-        res.send(data);
-      }
+router.get("/:teacherId/courses/:courseId/sections", async(req, res, next) => {
+    try {
+        const { teacherId, courseId } = req.params;
+        Instructor.find({ _id: teacherId, 'courses._id': courseId }, { 'courses.section': 1 }, function(err, data) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.send(data[0].courses[0].section);
+            }
+        })
+    } catch (err) {
+        console.log(err.message);
+        next(new Error())
     }
-  )
-  });
+
+});
+
+router.get("/:teacherId/courses/:courseId/sections/:sectionId", async(req, res, next) => {
+    try {
+        const { teacherId, courseId } = req.params;
+        Instructor.find({ _id: teacherId, 'courses._id': courseId }, { 'courses.section': 1 }, function(err, data) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.send(data[0].courses[0].section);
+            }
+        })
+    } catch (err) {
+        console.log(err.message);
+        next(new Error())
+    }
+
+});
 
 
 //delete sections for a specific course for a specific instructor
@@ -184,8 +214,8 @@ router.get("/courses/", async(req, res) => {
 
     await Instructor.find({ 'courses.title': { $regex: courseName } }, { courses: 1 })
         .then((result) => {
-            res.status(200).send(result);
             console.log(result)
+            return res.status(200).send(result);
         })
         .catch((err) => {
             res.status(500).send({
@@ -194,49 +224,82 @@ router.get("/courses/", async(req, res) => {
         });
 });
 
-router.get("/", function(req, res) {
+router.get("/video", function(req, res) {
     res.sendFile(__dirname + "/index.html");
 });
 
 router.get("/video/:videoName", function(req, res) {
-    // Ensure there is a range given for the video
-    const range = req.headers.range;
-    if (!range) {
-        res.status(400).send("Requires Range header");
+
+    const path = `uploads/${req.params.videoName}`; // .mp4
+    const stat = fs.statSync(path)
+    const fileSize = stat.size
+    const range = req.headers.range
+
+    if (range) {
+        const parts = range.replace(/bytes=/, "").split("-")
+        const start = parseInt(parts[0], 10)
+        const end = parts[1] ?
+            parseInt(parts[1], 10) :
+            fileSize - 1
+
+        const chunkSize = (end - start) + 1
+        const file = fs.createReadStream(path, { start, end })
+        const head = {
+            'Content-Range': `bytes ${start}-${end}/${fileSize}`,
+            'Accept-Ranges': 'bytes',
+            'Content-Length': chunkSize,
+            'Content-Type': 'video/mp4',
+        }
+
+        res.writeHead(206, head)
+        file.pipe(res)
+    } else {
+        const head = {
+            'Content-Length': fileSize,
+            'Content-Type': 'video/mp4',
+        }
+        res.writeHead(200, head)
+        fs.createReadStream(path).pipe(res)
     }
 
-    // get video stats (about 61MB)
-    const videoPath = path.join(
-        __dirname,
-        "..",
-        "uploads",
-        `${req.params.videoName}.mp4`
-    );
-    const videoSize = fs.statSync(videoPath).size;
+    //     // Ensure there is a range given for the video
+    //     const range = '323324'; //req.headers.range;
+    //     if (!range) {
+    //         res.status(400).send("Requires Range header");
+    //     }
 
-    // Parse Range
-    // Example: "bytes=32324-"
-    const CHUNK_SIZE = 10 ** 6; // 1MB
-    const start = Number(range.replace(/\D/g, ""));
-    const end = Math.min(start + CHUNK_SIZE, videoSize - 1);
+    //     // get video stats (about 61MB)
+    //     const videoPath = path.join(
+    //         __dirname,
+    //         "..",
+    //         "uploads",
+    //         `${req.params.videoName}.mp4`
+    //     );
+    //     const videoSize = fs.statSync(videoPath).size;
 
-    // Create headers
-    const contentLength = end - start + 1;
-    const headers = {
-        "Content-Range": `bytes ${start}-${end}/${videoSize}`,
-        "Accept-Ranges": "bytes",
-        "Content-Length": contentLength,
-        "Content-Type": "video/mp4",
-    };
+    //     // Parse Range
+    //     // Example: "bytes=32324-"
+    //     const CHUNK_SIZE = 10 ** 6; // 1MB
+    //     const start = Number(range.replace(/\D/g, ""));
+    //     const end = Math.min(start + CHUNK_SIZE, videoSize - 1);
 
-    // HTTP Status 206 for Partial Content
-    res.writeHead(206, headers);
+    //     // Create headers
+    //     const contentLength = end - start + 1;
+    //     const headers = {
+    //         "Content-Range": `bytes ${start}-${end}/${videoSize}`,
+    //         "Accept-Ranges": "bytes",
+    //         "Content-Length": contentLength,
+    //         "Content-Type": "video/mp4",
+    //     };
 
-    // create video read stream for this particular chunk
-    const videoStream = fs.createReadStream(videoPath, { start, end });
+    //     // HTTP Status 206 for Partial Content
+    //     res.writeHead(206, headers);
 
-    // Stream the video chunk to the client
-    videoStream.pipe(res);
+    //     // create video read stream for this particular chunk
+    //     const videoStream = fs.createReadStream(videoPath, { start, end });
+
+    //     // Stream the video chunk to the client
+    //     videoStream.pipe(res);
 });
 
 //instructor profile

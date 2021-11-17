@@ -14,7 +14,7 @@ import { Router, ActivatedRoute } from '@angular/router';
       <a class="btn btn-lg btn-primary" routerLinkActive="active" routerLink="./id/sections" role="button">View navbar docs »</a>
     </div> -->
 
-    <section class="jumbotron mt-4 ">
+  <section class="jumbotron mt-4 ">
   <form class="col-12 mt-4"  [formGroup]="registerCourseForm" (ngSubmit)="registerCourse()">     
     <div class="row mb-2">
   <div class="col-6">

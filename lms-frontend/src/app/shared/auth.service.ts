@@ -52,7 +52,7 @@ export class AuthService {
         // this.getUserProfile(_id).subscribe((res) => {
           this.currentUser = {_id, name, email, role};
           if(this.isStudent)
-            this.router.navigate(['user/' + _id]);
+            this.router.navigate(['user/' + _id, 'courses']);
           else if(this.isInstructor)
             this.router.navigate([`instructor/${_id}/courses`]);
         // })

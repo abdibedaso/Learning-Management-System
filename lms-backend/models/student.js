@@ -32,12 +32,13 @@ const studentSchema = new mongoose.Schema({
         }
     },
     courses: [{
+        _id: { type: mongoose.Schema.Types.ObjectId, ref: 'Instructor.courses' },
         title: String,
         category: String,
         instructor: String,
         language: String,
         progress: Number,
-        section: { title: String, number: Number, progress: Number }
+        section: { _id: Object, title: String, number: Number, progress: Number }
     }]
 
 }, { timestamps: { uploadedAt: 'created_at' } });
